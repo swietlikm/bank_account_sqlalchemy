@@ -1,4 +1,4 @@
-# bank_account_sqlalchemy
+# BankAccount Management system using SqlAlchemy
 Implementation of Bank Account management system using sqlAlchemy and MySQL Database
 
 App Features:
