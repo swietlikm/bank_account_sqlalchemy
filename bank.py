@@ -1,4 +1,5 @@
 import getpass
+import logging
 import os
 import random
 import string
@@ -12,6 +13,13 @@ from sqlalchemy.orm import Session
 clear = lambda: os.system("cls")
 engine = create_engine()
 session = Session(engine)
+
+# Configure the logger
+logging.basicConfig(
+    level=logging.INFO,
+    filename="bank.log",
+    format="%(asctime)s:%(levelname)s:%(message)s ",
+)
 
 
 def create_account():
@@ -52,6 +60,7 @@ def create_account():
 
         session.add_all([owner, user, bank_account])
         session.commit()
+    logging.info(f"New account created, username: {username}")
     print("Account successfully created")
 
 
@@ -200,7 +209,7 @@ class Account:
                         f"Your previous unsuccessful login: {query.Users.last_nok_login}"
                     )
                     session.commit()
-
+                logging.info(f"Successful login, username: {username}")
                 return True
 
             # If login was not successful, add timestamp to aware the owner
@@ -208,6 +217,7 @@ class Account:
                 query.Users.last_nok_login = now
                 session.commit()
         print("Invalid user or password")
+        logging.info(f"Unsuccessful login, username: {username}")
         return False
 
     def logout(self):
@@ -260,6 +270,7 @@ class Account:
             # Commit the changes to the database
             session.commit()
         clear()
+        logging.info(f"Updated account details, account_id: {self.__account_id}")
         print("Account successfully updated")
 
     def display_bank_account_details(self):
@@ -352,6 +363,7 @@ class Account:
             query.balance += amount
             session.add(transaction)
             session.commit()
+        logging.info(f"Account_id: {self.__account_id} performed deposit for ${amount}")
         print(f"Successfully deposited ${amount}")
 
     def withdraw(self, amount: float):
@@ -392,6 +404,9 @@ class Account:
             query.balance -= amount
             session.add(transaction)
             session.commit()
+        logging.info(
+            f"Account_id: {self.__account_id} performed withdraw for ${amount}"
+        )
         print(f"Successfully withdrawed ${amount}")
 
     def _check_if_account_logged(self):
@@ -472,6 +487,9 @@ class Account:
             # Add transaction histories and commit changes
             session.add_all([sender_transaction, recipient_transaction])
             session.commit()
+        logging.info(
+            f"Account_id: {self.__account_id} transfered ${amount} to {username}"
+        )
         print(f"Successfully transfered ${amount} to {username}")
 
     def transfer_to_account_number(
@@ -534,5 +552,7 @@ class Account:
                 session.add(recipient_transaction)
 
                 session.commit()  # commit the session here
-
+        logging.info(
+            f"Account_id: {self.__account_id} transfered ${amount} to {account_number}"
+        )
         print(f"Successfully transferred ${amount} to {account_number}")
