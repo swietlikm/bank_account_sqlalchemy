@@ -3,9 +3,9 @@ Implementation of Bank Account management system using sqlAlchemy and MySQL Data
 
 App Features:
 - models usign 5 database tables using 1-1 and 1-many relationships
-- setup of MySQL database data in config.ini after running setup.py
-- creating basae TransactionTypes in the first running of creator.py
-- main.py is a demo of a functionality inside bank.py
+- setup of MySQL database in config.ini after furst run of setup.py
+- creating base TransactionTypes in the first run of creator.py
+- main.py is a demo of a functionality
 
 # Bank Account Features:
 - create account with password hashing before database entry
